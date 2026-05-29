@@ -1,27 +1,68 @@
 # Ragnarok Remote Client
 
-💧 A project built with the Vapor web framework.
+A lightweight HTTP server that serves Ragnarok Online client assets — GRF-packed files and BGM — over the network. Built with [Vapor](https://vapor.codes) and Swift.
 
-## Getting Started
+Any HTTP client can request game resources at `/client/<path>`. The server first looks for the file on disk under `Resources/`, then falls back to extracting it from `data.grf`.
 
-To build the project using the Swift Package Manager, run the following command in the terminal from the root of the project:
-```bash
-swift build
+## Prerequisites
+
+- **Swift 6.0+** (for the native run), or
+- **Docker** (no Swift installation required)
+
+## Setup
+
+Before running the server, place your game assets in the `Resources/` folder:
+
+```
+Resources/
+├── BGM/          ← copy your entire BGM folder here
+│   ├── 01.mp3
+│   ├── 02.mp3
+│   └── ...
+└── data.grf      ← copy your data.grf file here
 ```
 
-To run the project and start the server, use the following command:
+> Both `BGM/` and `data.grf` are required. The server returns `404` for any path not found in either location.
+
+## Running
+
+### Option 1 — Swift (native)
+
 ```bash
 swift run
 ```
 
-To execute tests, use the following command:
+The server starts on **http://localhost:8080**.
+
+### Option 2 — Docker
+
 ```bash
-swift test
+docker compose up app
 ```
 
-### See more
+The server starts on **http://localhost:8080**.
 
-- [Vapor Website](https://vapor.codes)
-- [Vapor Documentation](https://docs.vapor.codes)
-- [Vapor GitHub](https://github.com/vapor)
-- [Vapor Community](https://github.com/vapor-community)
+To stop it:
+
+```bash
+docker compose down
+```
+
+## API
+
+All assets are served under the `/client/` prefix.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/client/<path>` | Serve a file from `Resources/` or `data.grf` |
+
+**Examples:**
+
+```
+GET /client/BGM/01.mp3
+GET /client/data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp.bmp
+```
+
+## License
+
+[GPL-3.0](LICENSE)
