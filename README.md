@@ -1,67 +1,97 @@
 # Ragnarok Remote Client
 
-A lightweight HTTP server that serves Ragnarok Online client assets — GRF-packed files and BGM — over the network. Built with [Vapor](https://vapor.codes) and Swift.
+A lightweight HTTP server for Ragnarok Online client assets, built with [Vapor](https://vapor.codes) and Swift. It serves files from a client directory and extracts resources from `data.grf` on demand.
 
-Any HTTP client can request game resources at `/client/<path>`. The server first looks for the file on disk under `Resources/`, then falls back to extracting it from `data.grf`.
+## Deploy a prebuilt image
 
-## Prerequisites
+The [Docker Hub image](https://hub.docker.com/r/arkadeleon/ragnarok-remote-client) includes game resources and is ready to run.
 
-- **Swift 6.0+** (for the native run), or
-- **Docker** (no Swift installation required)
+### Render
 
-## Setup
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2Farkadeleon%2Fragnarok-remote-client)
 
-Before running the server, place your game assets in the `Resources/` folder:
+Click **Deploy to Render**, sign in, and approve the Blueprint deployment. The template uses the prebuilt [`arkadeleon/ragnarok-remote-client:latest`](https://hub.docker.com/r/arkadeleon/ragnarok-remote-client) image, which already includes game resources. No local files, Docker installation, or volume mounts are required.
 
+After the service is live, use its public URL with `/client` appended as the base URL for requesting game resources:
+
+```text
+https://your-service.onrender.com/client
 ```
+
+The template selects Render's **Free** instance and port **8080**, matching the image's default listener. Free instances have 512 MB RAM and sleep after 15 minutes without traffic; waking takes about a minute, so the first resource request may time out. Wait for the service to wake and retry. See [Render's free instance limits](https://render.com/docs/free) for current usage limits.
+
+### Docker
+
+With Docker installed, start the server:
+
+```bash
+docker run -d --name ragnarok-remote-client --restart unless-stopped -p 8080:8080 arkadeleon/ragnarok-remote-client:latest
+```
+
+The resource base URL is `http://localhost:8080/client`. From another device, replace `localhost` with the host computer's LAN IP address.
+
+To stop or restart the container:
+
+```bash
+docker stop ragnarok-remote-client
+docker start ragnarok-remote-client
+```
+
+## Run from source
+
+Clone the repository and enter its directory:
+
+```bash
+git clone https://github.com/arkadeleon/ragnarok-remote-client.git
+cd ragnarok-remote-client
+```
+
+### Prepare resources
+
+Place your client resources in the repository's `Resources/` directory:
+
+```text
 Resources/
-├── BGM/          ← copy your entire BGM folder here
+├── BGM/
 │   ├── 01.mp3
-│   ├── 02.mp3
 │   └── ...
-└── data.grf      ← copy your data.grf file here
+└── data.grf
 ```
 
-> Both `BGM/` and `data.grf` are required. The server returns `404` for any path not found in either location.
+### Run with Swift
 
-## Running
-
-### Option 1 — Swift (native)
+Requires **Swift 6.0+**.
 
 ```bash
 swift run
 ```
 
-The server starts on **http://localhost:8080**.
+### Build and run with Docker Compose
 
-### Option 2 — Docker
+Requires **Docker with Compose**. The build copies your `Resources/` directory into the image.
 
 ```bash
-docker compose up app
+docker compose up --build -d app
 ```
 
-The server starts on **http://localhost:8080**.
-
-To stop it:
+To stop the service:
 
 ```bash
 docker compose down
 ```
 
+Both methods listen on port **8080**. The local resource base URL is `http://localhost:8080/client`.
+
 ## API
 
-All assets are served under the `/client/` prefix.
+Request resources using `GET /client/<path>`. The server first checks for a file under `Resources/`, then looks inside `data.grf`. Missing resources return **404 Not Found**.
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/client/<path>` | Serve a file from `Resources/` or `data.grf` |
+| Request | Resource |
+|---------|----------|
+| `GET /client/BGM/01.mp3` | Background music |
+| `GET /client/data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp.bmp` | Texture from the client data |
 
-**Examples:**
-
-```
-GET /client/BGM/01.mp3
-GET /client/data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp.bmp
-```
+Percent-encode resource paths when constructing request URLs.
 
 ## License
 
