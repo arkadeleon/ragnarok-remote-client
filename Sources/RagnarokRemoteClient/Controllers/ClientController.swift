@@ -24,15 +24,11 @@ struct ClientController: RouteCollection {
     }
 
     func boot(routes: any RoutesBuilder) throws {
-        routes.get("client", "**", use: client)
+        routes.get("**", use: client)
     }
 
     private func client(req: Request) async throws -> Response {
-        guard req.url.path.hasPrefix("/client/") else {
-            throw Abort(.badRequest)
-        }
-
-        guard let path = req.url.path.dropFirst("/client/".count).removingPercentEncoding else {
+        guard let path = req.url.path.dropFirst().removingPercentEncoding else {
             throw Abort(.badRequest)
         }
 

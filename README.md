@@ -12,10 +12,10 @@ The [Docker Hub image](https://hub.docker.com/r/arkadeleon/ragnarok-remote-clien
 
 Click **Deploy on Railway**, sign in, and deploy the template. It uses the prebuilt Docker Hub image, so no local files, Docker installation, or volume mounts are required.
 
-After the service is live, use its public URL with `/client` appended as the base URL for requesting game resources. If no public domain is configured, generate one targeting port **8080** in the service's networking settings:
+After the service is live, use its public URL as the base URL for requesting game resources. If no public domain is configured, generate one targeting port **8080** in the service's networking settings:
 
 ```text
-https://your-service.up.railway.app/client
+https://your-service.up.railway.app
 ```
 
 Choose a Railway plan that supports Docker images larger than **4 GB**. Hosting and network usage charges apply; see [Railway pricing](https://railway.com/pricing).
@@ -30,7 +30,7 @@ With Docker installed, start the server:
 docker run -d --name ragnarok-remote-client --restart unless-stopped -p 8080:8080 arkadeleon/ragnarok-remote-client:latest
 ```
 
-The resource base URL is `http://localhost:8080/client`. From another device, replace `localhost` with the host computer's LAN IP address.
+The resource base URL is `http://localhost:8080`. From another device, replace `localhost` with the host computer's LAN IP address.
 
 To stop or restart the container:
 
@@ -82,16 +82,16 @@ To stop the service:
 docker compose down
 ```
 
-Both methods listen on port **8080**. The local resource base URL is `http://localhost:8080/client`.
+Both methods listen on port **8080**. The local resource base URL is `http://localhost:8080`.
 
 ## API
 
-Request resources using `GET /client/<path>`. The server first checks for a file under `Resources/`, then looks inside `data.grf`. Missing resources return **404 Not Found**.
+Request resources using `GET /<path>`. The server first checks for a file under `Resources/`, then looks inside `data.grf`. Missing resources return **404 Not Found**.
 
 | Request | Resource |
 |---------|----------|
-| `GET /client/BGM/01.mp3` | Background music |
-| `GET /client/data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp.bmp` | Texture from the client data |
+| `GET /BGM/01.mp3` | Background music |
+| `GET /data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp.bmp` | Texture from the client data |
 
 Percent-encode resource paths when constructing request URLs.
 
