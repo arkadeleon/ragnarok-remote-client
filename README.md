@@ -6,19 +6,21 @@ A lightweight HTTP server for Ragnarok Online client assets, built with [Vapor](
 
 The [Docker Hub image](https://hub.docker.com/r/arkadeleon/ragnarok-remote-client) includes game resources and is ready to run.
 
-### Render
+### Railway
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2Farkadeleon%2Fragnarok-remote-client)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/ragnarok-remote-client?referralCode=wKbXec&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
-Click **Deploy to Render**, sign in, and approve the Blueprint deployment. The template uses the prebuilt [`arkadeleon/ragnarok-remote-client:latest`](https://hub.docker.com/r/arkadeleon/ragnarok-remote-client) image, which already includes game resources. No local files, Docker installation, or volume mounts are required.
+Click **Deploy on Railway**, sign in, and deploy the template. It uses the prebuilt Docker Hub image, so no local files, Docker installation, or volume mounts are required.
 
-After the service is live, use its public URL with `/client` appended as the base URL for requesting game resources:
+After the service is live, use its public URL with `/client` appended as the base URL for requesting game resources. If no public domain is configured, generate one targeting port **8080** in the service's networking settings:
 
 ```text
-https://your-service.onrender.com/client
+https://your-service.up.railway.app/client
 ```
 
-The template selects Render's **Free** instance and port **8080**, matching the image's default listener. Free instances have 512 MB RAM and sleep after 15 minutes without traffic; waking takes about a minute, so the first resource request may time out. Wait for the service to wake and retry. See [Render's free instance limits](https://render.com/docs/free) for current usage limits.
+Choose a Railway plan that supports Docker images larger than **4 GB**. Hosting and network usage charges apply; see [Railway pricing](https://railway.com/pricing).
+
+Deploying through this template helps support the project through Railway's template kickback program. The deployment link also includes the maintainer's referral code.
 
 ### Docker
 
