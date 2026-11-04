@@ -1,5 +1,5 @@
 {
-  "originHash" : "f18e88633537f4a4043c854fe4c1543a17623d488d107cc8755db21110ce00c7",
+  "originHash" : "c1b34d74228a3e95039ac0b5811ccfe509c0aca8b112811d34eef148b699de82",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -43,7 +43,7 @@
       "location" : "https://github.com/arkadeleon/ragnarok-grf",
       "state" : {
         "branch" : "master",
-        "revision" : "d24bfc1e86600dad43627b77ee289e4558f36c1f"
+        "revision" : "a5a9c1a2fd1d3cf1e561ec5c2ec57928f7c945a9"
       }
     },
     {
@@ -134,15 +134,6 @@
       "state" : {
         "revision" : "dc4030184203ffafbb2ec614352487235d747fe0",
         "version" : "1.4.1"
-      }
-    },
-    {
-      "identity" : "swift-gzip",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mihai8804858/swift-gzip",
-      "state" : {
-        "branch" : "main",
-        "revision" : "97c502f10283dbd80eda534d164b715c9c973d72"
       }
     },
     {

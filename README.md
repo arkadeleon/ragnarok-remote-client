@@ -62,7 +62,7 @@ Resources/
 
 ### Run with Swift
 
-Requires **Swift 6.0+**.
+Requires **Swift 6.2+**.
 
 ```bash
 swift run
